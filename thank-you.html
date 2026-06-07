@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thank You! - Vix Draws World</title>
+    <link rel="icon" type="image/png" href="Picsart_25-12-30_21-09-30-937.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+    <style>
+      :root { --primary:#a67c52; --secondary:#d9c0a3; --text-dark:#333; --text-light:#666; }
+      * { margin:0; padding:0; box-sizing:border-box; }
+      body { font-family:'Lato',sans-serif; background:#f4f4f4; min-height:100vh; display:flex; flex-direction:column; }
+      nav {
+        background:rgba(255,255,255,0.97); padding:14px 40px;
+        display:flex; justify-content:space-between; align-items:center;
+        border-bottom:3px solid var(--primary); box-shadow:0 2px 8px rgba(0,0,0,0.04);
+      }
+      nav img { height:52px; border-radius:4px; }
+      .wrap { flex:1; display:flex; justify-content:center; align-items:center; padding:50px 20px; }
+      .card {
+        background:#fff; border-radius:12px;
+        box-shadow:0 10px 30px rgba(166,124,82,0.15);
+        border-top:6px solid var(--primary);
+        padding:55px 48px; max-width:580px; width:100%; text-align:center;
+      }
+      .check-circle {
+        width:86px; height:86px; background:var(--primary); border-radius:50%;
+        display:flex; justify-content:center; align-items:center;
+        margin:0 auto 26px; animation:pop .5s ease-out;
+      }
+      @keyframes pop { 0%{transform:scale(0);opacity:0} 70%{transform:scale(1.1)} 100%{transform:scale(1);opacity:1} }
+      .check-circle svg { width:42px; height:42px; stroke:#fff; stroke-width:3; fill:none; }
+      h1 { font-family:'Playfair Display',serif; font-size:2.4rem; color:var(--primary); margin-bottom:10px; }
+      .sub { font-size:.85rem; color:var(--text-light); letter-spacing:2px; text-transform:uppercase; margin-bottom:22px; }
+      .divider { width:55px; height:3px; background:var(--secondary); margin:0 auto 24px; border-radius:2px; }
+      .lang-row { display:flex; justify-content:center; gap:10px; margin-bottom:24px; }
+      .lang-btn {
+        padding:7px 20px; border:2px solid var(--primary);
+        background:#fff; color:var(--primary); border-radius:30px;
+        cursor:pointer; font-weight:700; font-size:.82rem;
+        font-family:'Lato',sans-serif; transition:.25s;
+      }
+      .lang-btn.on { background:var(--primary); color:#fff; }
+      .msg { color:var(--text-light); line-height:1.85; font-size:1rem; margin-bottom:12px; }
+      .contact-box {
+        background:#fffbf5; border:1px solid var(--secondary);
+        border-radius:8px; padding:18px; margin:24px 0;
+      }
+      .contact-box p { font-size:.9rem; color:var(--text-light); margin-bottom:7px; }
+      .contact-box p:last-child { margin-bottom:0; }
+      .contact-box a { color:var(--primary); font-weight:700; text-decoration:none; }
+      .back-btn {
+        display:inline-block; margin-top:8px; background:var(--primary);
+        color:#fff; padding:13px 36px; border-radius:4px; text-decoration:none;
+        font-weight:700; letter-spacing:2px; font-size:.88rem; text-transform:uppercase; transition:.3s;
+      }
+      .back-btn:hover { background:#8a6642; transform:translateY(-3px); }
+      footer { background:#e8e8e8; color:var(--text-light); padding:26px; text-align:center; border-top:5px solid var(--secondary); font-size:.82rem; }
+      footer a { color:var(--primary); font-weight:700; text-decoration:none; }
+      @media(max-width:580px) { .card{padding:36px 20px;} h1{font-size:2rem;} nav{padding:12px 20px;} }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <img src="Picsart_25-12-14_21-00-54-609.jpg" alt="Vix Draws World" />
+    </nav>
+    <div class="wrap">
+      <div class="card">
+        <div class="check-circle">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <h1>Thank You!</h1>
+        <p class="sub" id="card-sub">Order Received Successfully</p>
+        <div class="divider"></div>
+        <div class="lang-row">
+          <button class="lang-btn on" onclick="setLang('en',this)">English</button>
+          <button class="lang-btn" onclick="setLang('ta',this)">தமிழ்</button>
+        </div>
+        <div id="msg-en">
+          <p class="msg">Your portrait commission request has been received! 🎨</p>
+          <p class="msg">I will review your reference photo and get back to you within <strong>24–48 hours</strong>.</p>
+        </div>
+        <div id="msg-ta" style="display:none;">
+          <p class="msg">உங்கள் portrait commission request கிடைத்தது! 🎨</p>
+          <p class="msg">நான் உங்கள் reference photo பார்த்து <strong>24–48 மணி நேரத்தில்</strong> தொடர்பு கொள்வேன்.</p>
+        </div>
+        <div class="contact-box">
+          <p>&#128222; <a href="tel:8610493059">8610493059</a></p>
+          <p>&#128140; <a href="mailto:vixdrawsworldx@gmail.com">vixdrawsworldx@gmail.com</a></p>
+          <p>&#128247; <a href="https://www.instagram.com/vix_drawsworld_x___" target="_blank">@vix_drawsworld_x___</a></p>
+        </div>
+        <a href="index.html" class="back-btn">&larr; Back to Home</a>
+      </div>
+    </div>
+    <footer>
+      <p>&copy; 2025 Vix Draws World x &bull; All Rights Reserved</p>
+    </footer>
+    <script>
+      function setLang(lang, btn) {
+        document.getElementById('msg-en').style.display = lang==='en' ? 'block' : 'none';
+        document.getElementById('msg-ta').style.display = lang==='ta' ? 'block' : 'none';
+        document.getElementById('card-sub').textContent = lang==='en' ? 'Order Received Successfully' : 'ஆர்டர் வெற்றிகரமாக கிடைத்தது';
+        document.querySelectorAll('.lang-btn').forEach(function(b){ b.classList.remove('on'); });
+        btn.classList.add('on');
+      }
+    </script>
+  </body>
+</html>

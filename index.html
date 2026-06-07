@@ -1,0 +1,837 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vix Draws World - Art Studio</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="Picsart_25-12-30_21-09-30-937.png"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #a67c52;
+        --secondary: #d9c0a3;
+        --text-dark: #333;
+        --text-light: #666;
+        --shadow: 0 10px 30px rgba(166, 124, 82, 0.15);
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "Lato", sans-serif;
+        color: var(--text-dark);
+        overflow-x: hidden;
+      }
+      body.loading {
+        overflow: hidden;
+      }
+
+      /* PRELOADER */
+      #preloader {
+        position: fixed;
+        inset: 0;
+        background: #fff;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: opacity 0.7s ease;
+      }
+      #preloader img {
+        width: 120px;
+        animation: breathe 2s ease-in-out infinite;
+      }
+      #preloader .brand {
+        font-family: "Playfair Display", serif;
+        font-size: 1.1rem;
+        color: var(--primary);
+        letter-spacing: 5px;
+        margin-top: 16px;
+        animation: fadeUp 1s ease forwards;
+        opacity: 0;
+      }
+      #preloader .bar-wrap {
+        width: 110px;
+        height: 3px;
+        background: #eee;
+        border-radius: 2px;
+        margin-top: 16px;
+        overflow: hidden;
+      }
+      #preloader .bar {
+        height: 100%;
+        background: var(--primary);
+        border-radius: 2px;
+        animation: loadbar 2s ease forwards;
+      }
+      @keyframes breathe {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 0.7;
+        }
+        50% {
+          transform: scale(1.08);
+          opacity: 1;
+        }
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes loadbar {
+        from {
+          width: 0;
+        }
+        to {
+          width: 100%;
+        }
+      }
+
+      /* NAV */
+      nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.97);
+        padding: 14px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 3px solid var(--primary);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      }
+      nav img {
+        height: 52px;
+        border-radius: 4px;
+      }
+      .nav-links a {
+        color: var(--text-dark);
+        text-decoration: none;
+        margin-left: 32px;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 700;
+        transition: color 0.3s;
+      }
+      .nav-links a:hover {
+        color: var(--primary);
+      }
+      .nav-btn {
+        border: 2px solid var(--primary);
+        padding: 7px 22px;
+        border-radius: 30px;
+        color: var(--primary) !important;
+      }
+      .nav-btn:hover {
+        background: var(--primary);
+        color: #fff !important;
+      }
+      .hamburger {
+        display: none;
+        font-size: 26px;
+        cursor: pointer;
+        color: var(--text-dark);
+      }
+
+      /* SIDEBAR */
+      .overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        z-index: 1500;
+        display: none;
+      }
+      .overlay.on {
+        display: block;
+      }
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 260px;
+        height: 100%;
+        background: #fff;
+        z-index: 2000;
+        transition: 0.35s ease;
+        padding-top: 60px;
+        box-shadow: 2px 0 12px rgba(0, 0, 0, 0.1);
+      }
+      .sidebar.on {
+        left: 0;
+      }
+      .sidebar a {
+        display: block;
+        padding: 14px 28px;
+        color: var(--text-dark);
+        text-decoration: none;
+        font-size: 15px;
+        border-bottom: 1px solid #f0f0f0;
+        transition: color 0.2s;
+      }
+      .sidebar a:hover {
+        color: var(--primary);
+      }
+
+      /* HERO */
+      .hero {
+        height: 90vh;
+        min-height: 500px;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0.42)),
+          url("IMG20251208124510.jpg") center/cover no-repeat;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: #fff;
+        padding: 20px;
+      }
+      .hero h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 3.8rem;
+        text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        margin-bottom: 12px;
+      }
+      .hero p {
+        font-size: 1.1rem;
+        letter-spacing: 3px;
+        font-weight: 300;
+        opacity: 0.9;
+      }
+      .hero a {
+        margin-top: 36px;
+        background: var(--primary);
+        color: #fff;
+        padding: 14px 38px;
+        border-radius: 2px;
+        text-decoration: none;
+        font-weight: 700;
+        letter-spacing: 2px;
+        font-size: 0.95rem;
+        transition: 0.3s;
+      }
+      .hero a:hover {
+        background: #8a6642;
+        transform: translateY(-3px);
+      }
+
+      /* SECTIONS */
+      .sec {
+        padding: 90px 20px;
+        max-width: 1080px;
+        margin: 0 auto;
+      }
+      .sec-title {
+        text-align: center;
+        font-family: "Playfair Display", serif;
+        font-size: 2.8rem;
+        color: var(--primary);
+        margin-bottom: 55px;
+      }
+
+      /* ABOUT */
+      .about-inner {
+        display: flex;
+        align-items: center;
+        gap: 55px;
+        flex-wrap: wrap;
+        background: #fff;
+        padding: 48px;
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        border-top: 5px solid var(--primary);
+      }
+      .about-inner img {
+        width: 210px;
+        height: 210px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 7px solid var(--secondary);
+        flex-shrink: 0;
+      }
+      .about-inner p {
+        color: var(--text-light);
+        line-height: 1.85;
+        font-size: 1.05rem;
+        flex: 1;
+        min-width: 280px;
+      }
+
+      /* GALLERY */
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 22px;
+      }
+      .gallery-item {
+        height: 300px;
+        border-radius: 4px;
+        overflow: hidden;
+        border: 1px solid #ddd;
+        padding: 8px;
+        background: #fff;
+        transition: 0.3s;
+      }
+      .gallery-item:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow);
+        border-color: var(--primary);
+      }
+      .gallery-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .insta-cta {
+        display: block;
+        text-align: center;
+        margin-top: 38px;
+        color: var(--primary);
+        font-weight: 700;
+        text-decoration: none;
+        border-bottom: 2px solid var(--secondary);
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+        padding-bottom: 2px;
+      }
+
+      /* VIDEO */
+      .video-sec {
+        background: #111;
+        padding: 90px 20px;
+        text-align: center;
+      }
+      .video-sec .sec-title {
+        color: var(--secondary);
+        margin-bottom: 8px;
+      }
+      .video-sec .sub {
+        color: #777;
+        letter-spacing: 3px;
+        font-size: 0.85rem;
+        margin-bottom: 38px;
+      }
+      .video-wrap {
+        max-width: 780px;
+        margin: 0 auto;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 3px solid var(--primary);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        position: relative;
+        padding-bottom: 56.25%;
+        height: 0;
+      }
+      .video-wrap iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+
+      /* BOOKING */
+      .book-sec {
+        background: #fffbf5;
+        padding: 90px 20px;
+      }
+      .book-inner {
+        max-width: 780px;
+        margin: 0 auto;
+        background: #fff;
+        padding: 48px;
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        border: 1px solid #e8e8e8;
+      }
+      .form-group {
+        margin-bottom: 22px;
+      }
+      label {
+        display: block;
+        color: var(--text-light);
+        margin-bottom: 7px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+      }
+      input,
+      textarea {
+        width: 100%;
+        padding: 13px 15px;
+        border: 1px solid #ddd;
+        background: #fdfdfd;
+        border-radius: 4px;
+        font-family: "Lato", sans-serif;
+        font-size: 0.95rem;
+        color: var(--text-dark);
+        transition: 0.25s;
+      }
+      input:focus,
+      textarea:focus {
+        border-color: var(--primary);
+        outline: none;
+        background: #fff;
+      }
+      .sizes {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .size-btn {
+        flex: 1;
+        min-width: 80px;
+        padding: 13px 10px;
+        border: 1px solid #ddd;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 4px;
+        background: #fff;
+        font-family: "Lato", sans-serif;
+        font-size: 0.9rem;
+        transition: 0.25s;
+        color: var(--text-dark);
+      }
+      .size-btn:hover {
+        border-color: var(--primary);
+      }
+      .size-btn.on {
+        background: var(--primary);
+        color: #fff;
+        border-color: var(--primary);
+      }
+      .upload-zone {
+        border: 2px dashed var(--secondary);
+        background: #fffbf5;
+        padding: 28px;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 4px;
+        color: var(--primary);
+        font-weight: 700;
+        transition: 0.25s;
+        font-size: 0.95rem;
+      }
+      .upload-zone:hover {
+        background: #fff5e8;
+        border-color: var(--primary);
+      }
+      #file-name {
+        margin-top: 8px;
+        font-size: 0.85rem;
+        color: var(--primary);
+        text-align: center;
+      }
+      #form-err {
+        color: #c0392b;
+        font-size: 0.88rem;
+        margin-bottom: 12px;
+        display: none;
+      }
+      .submit-btn {
+        width: 100%;
+        background: var(--primary);
+        color: #fff;
+        padding: 17px;
+        border: none;
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: 0.3s;
+        text-transform: uppercase;
+        font-family: "Lato", sans-serif;
+      }
+      .submit-btn:hover {
+        background: #8a6642;
+      }
+      .submit-btn:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+      }
+
+      /* FOOTER */
+      footer {
+        background: #e8e8e8;
+        padding: 48px 40px;
+        text-align: center;
+        border-top: 5px solid var(--secondary);
+        color: var(--text-light);
+      }
+      footer h3 {
+        font-family: "Playfair Display", serif;
+        font-size: 1.5rem;
+        color: var(--text-dark);
+        margin-bottom: 12px;
+      }
+      footer a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 700;
+      }
+      footer p {
+        margin-top: 10px;
+        font-size: 0.9rem;
+      }
+
+      @media (max-width: 768px) {
+        nav {
+          padding: 12px 20px;
+        }
+        .nav-links {
+          display: none;
+        }
+        .hamburger {
+          display: block;
+        }
+        .hero h1 {
+          font-size: 2.4rem;
+        }
+        .about-inner {
+          padding: 28px 20px;
+        }
+        .book-inner {
+          padding: 28px 18px;
+        }
+        .sizes {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body class="loading">
+    <!-- PRELOADER -->
+    <div id="preloader">
+      <img src="Picsart_25-12-30_21-09-30-937.png" alt="Vix Draws World" />
+      <div class="brand">VIX DRAWS WORLD</div>
+      <div class="bar-wrap"><div class="bar"></div></div>
+    </div>
+
+    <!-- MOBILE -->
+    <div class="overlay" id="ov" onclick="toggleMenu()"></div>
+    <div class="sidebar" id="sb">
+      <div
+        style="
+          padding: 18px 28px;
+          font-weight: 700;
+          color: var(--primary);
+          font-size: 0.85rem;
+          letter-spacing: 2px;
+        "
+      >
+        MENU
+      </div>
+      <a href="#home" onclick="toggleMenu()">Home</a>
+      <a href="#about" onclick="toggleMenu()">About</a>
+      <a href="#gallery" onclick="toggleMenu()">Gallery</a>
+      <a href="#video" onclick="toggleMenu()">Watch Me Work</a>
+      <a
+        href="#book"
+        onclick="toggleMenu()"
+        style="color: var(--primary); font-weight: 700"
+        >Book Now</a
+      >
+    </div>
+
+    <!-- NAV -->
+    <nav>
+      <img src="Picsart_25-12-14_21-00-54-609.jpg" alt="Vix Draws World" />
+      <div class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#video">Watch</a>
+        <a href="#book" class="nav-btn">Book Commission</a>
+      </div>
+      <div class="hamburger" onclick="toggleMenu()">&#9776;</div>
+    </nav>
+
+    <!-- HERO -->
+    <section id="home" class="hero">
+      <h1>Art That Captures Soul</h1>
+      <p>HYPER-REALISTIC CHARCOAL &amp; GRAPHITE PORTRAITS</p>
+      <a href="#book">Start Your Order</a>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="sec">
+      <h2 class="sec-title">The Artist</h2>
+      <div class="about-inner">
+        <img src="IMG_20251213_115140.png" alt="Vicky" loading="lazy" />
+        <p>
+          Welcome to <strong>Vix Draws World x</strong>. I am a professional
+          artist based in Chennai, dedicated to creating timeless portraits. My
+          work combines earthy textures with sharp contrast to bring your
+          memories to life on paper. Every portrait is crafted with care,
+          passion, and precision — just for you.
+        </p>
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="gallery" class="sec">
+      <h2 class="sec-title">Portfolio</h2>
+      <div class="gallery-grid">
+        <div class="gallery-item">
+          <img src="IMG20250804102717.jpg" loading="lazy" alt="Portrait" />
+        </div>
+        <div class="gallery-item">
+          <img src="IMG20250817172558.jpg" loading="lazy" alt="Portrait" />
+        </div>
+        <div class="gallery-item">
+          <img src="IMG_20251019_090917.png" loading="lazy" alt="Portrait" />
+        </div>
+        <div class="gallery-item">
+          <img
+            src="OplusInfoCollection_251213112001058.png"
+            loading="lazy"
+            alt="Portrait"
+          />
+        </div>
+      </div>
+      <a
+        href="https://www.instagram.com/vix_drawsworld_x___"
+        target="_blank"
+        class="insta-cta"
+        >View Full Gallery on Instagram &rarr;</a
+      >
+    </section>
+
+    <!-- VIDEO -->
+    <section id="video" class="video-sec">
+      <div style="max-width: 1080px; margin: 0 auto">
+        <h2 class="sec-title">Watch Me Work</h2>
+        <p class="sub">SEE THE ART COME TO LIFE</p>
+        <div class="video-wrap">
+          <iframe
+            src="https://www.instagram.com/reel/DNyG8Jl5CyK/embed/"
+            allowfullscreen
+            scrolling="no"
+            allow="
+              autoplay;
+              clipboard-write;
+              encrypted-media;
+              picture-in-picture;
+              web-share;
+            "
+          ></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOOKING -->
+    <section id="book" class="book-sec">
+      <div style="max-width: 1080px; margin: 0 auto">
+        <h2 class="sec-title" style="color: var(--primary)">
+          Commission a Portrait
+        </h2>
+        <div class="book-inner">
+          <form id="orderForm" enctype="multipart/form-data">
+            <div class="form-group">
+              <label>SELECT SIZE</label>
+              <div class="sizes">
+                <button
+                  type="button"
+                  class="size-btn"
+                  onclick="pickSize(this, 'A4')"
+                >
+                  A4 Size
+                </button>
+                <button
+                  type="button"
+                  class="size-btn"
+                  onclick="pickSize(this, 'A3')"
+                >
+                  A3 Size
+                </button>
+                <button
+                  type="button"
+                  class="size-btn"
+                  onclick="pickSize(this, 'A2')"
+                >
+                  A2 Size
+                </button>
+              </div>
+              <input type="hidden" id="sizeVal" name="Size" />
+            </div>
+            <div class="form-group">
+              <label>UPLOAD REFERENCE PHOTO</label>
+              <div
+                class="upload-zone"
+                onclick="document.getElementById('photoInput').click()"
+              >
+                &#128247; Click to Browse Photo
+              </div>
+              <input
+                type="file"
+                id="photoInput"
+                name="photo"
+                accept="image/*"
+                style="display: none"
+                required
+              />
+              <div id="file-name"></div>
+            </div>
+            <div class="form-group">
+              <label>YOUR DETAILS</label>
+              <input
+                type="text"
+                name="Name"
+                placeholder="Full Name"
+                required
+                style="margin-bottom: 10px"
+              />
+              <input
+                type="tel"
+                name="Phone"
+                placeholder="Phone Number"
+                required
+                style="margin-bottom: 10px"
+              />
+              <textarea
+                name="Address"
+                rows="3"
+                placeholder="Delivery Address"
+                required
+              ></textarea>
+            </div>
+            <div id="form-err"></div>
+            <button type="submit" class="submit-btn" id="subBtn">
+              Submit Request
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <h3>Vix Draws World x</h3>
+      <p>
+        <a href="tel:8610493059">8610493059</a> &nbsp;&bull;&nbsp;
+        <a href="mailto:vixdrawsworldx@gmail.com">vixdrawsworldx@gmail.com</a>
+      </p>
+      <p>
+        <a href="https://www.instagram.com/vix_drawsworld_x___" target="_blank"
+          >@vix_drawsworld_x___</a
+        >
+      </p>
+      <p style="margin-top: 18px; font-size: 0.8rem">
+        &copy; 2025 Vix Draws World x &mdash; All Rights Reserved
+      </p>
+    </footer>
+
+    <script>
+      window.addEventListener("load", function () {
+        setTimeout(function () {
+          var pre = document.getElementById("preloader");
+          pre.style.opacity = "0";
+          setTimeout(function () {
+            pre.style.display = "none";
+            document.body.classList.remove("loading");
+          }, 700);
+        }, 2000);
+      });
+
+      function toggleMenu() {
+        document.getElementById("sb").classList.toggle("on");
+        document.getElementById("ov").classList.toggle("on");
+      }
+
+      function pickSize(btn, val) {
+        document.querySelectorAll(".size-btn").forEach(function (b) {
+          b.classList.remove("on");
+        });
+        btn.classList.add("on");
+        document.getElementById("sizeVal").value = val;
+      }
+
+      document
+        .getElementById("photoInput")
+        .addEventListener("change", function () {
+          document.getElementById("file-name").textContent = this.files.length
+            ? "✅ " + this.files[0].name
+            : "";
+        });
+
+      document
+        .getElementById("orderForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+          var err = document.getElementById("form-err");
+          var btn = document.getElementById("subBtn");
+          err.style.display = "none";
+
+          if (!document.getElementById("sizeVal").value) {
+            err.textContent = "Please select a size (A4 / A3 / A2).";
+            err.style.display = "block";
+            return;
+          }
+          if (!document.getElementById("photoInput").files.length) {
+            err.textContent = "Please upload a reference photo.";
+            err.style.display = "block";
+            return;
+          }
+
+          btn.textContent = "Sending... ⏳";
+          btn.disabled = true;
+
+          try {
+            var res = await fetch("https://formspree.io/f/xaqzypna", {
+              method: "POST",
+              body: new FormData(this),
+              headers: { Accept: "application/json" },
+            });
+            if (res.ok) {
+              window.location.href = "thank-you.html";
+            } else {
+              var data = await res.json();
+              err.textContent =
+                data && data.errors
+                  ? data.errors
+                      .map(function (x) {
+                        return x.message;
+                      })
+                      .join(", ")
+                  : "Something went wrong. Please try again.";
+              err.style.display = "block";
+              btn.textContent = "Submit Request";
+              btn.disabled = false;
+            }
+          } catch (ex) {
+            err.textContent = "Network error. Please check your connection.";
+            err.style.display = "block";
+            btn.textContent = "Submit Request";
+            btn.disabled = false;
+          }
+        });
+    </script>
+  </body>
+</html>
